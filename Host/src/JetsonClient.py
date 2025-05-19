@@ -64,7 +64,7 @@ class JetsonNanoClient:
             
             # Deserialize the data
             pred = pickle.loads(packet_raw)
-            print(f" >>> [Rx] Received prediction: {pred}")
+            #print(f" >>> [Rx] Received prediction: {pred}")
             return pred
 
         except (socket.timeout, ConnectionResetError, EOFError, pickle.UnpicklingError) as e:
@@ -76,9 +76,9 @@ class JetsonNanoClient:
             # Serialize the data
             serialized_data = pickle.dumps(data)
             msg = struct.pack('>I', len(serialized_data)) + serialized_data
-            print(f">>> [Tx] Sending data: {data}")
+            #print(f">>> [Tx] Sending data: {data}")
             self.client_socket.sendall(msg)
-            print(">>> [Tx] Data sent successfully.")
+            #print(">>> [Tx] Data sent successfully.")
         except (socket.timeout, ConnectionResetError, EOFError, pickle.PicklingError) as e:
             print(f">>> [Tx] Error sending data: {e} <<<")
 
@@ -91,7 +91,7 @@ class JetsonNanoClient:
         test_num = split_file[1][0]
         class_num = split_file[2][9]
         exp_params = [exp_num, test_num, class_num]
-        print(f"Experiment parameters: {exp_params}")
+        #print(f"Experiment parameters: {exp_params}")
 
         real_labels = data[:,-2]
         other_predictions = data[:,-1]
@@ -112,7 +112,7 @@ class JetsonNanoClient:
 
             self.predictions[self.idx] = prediction
             self.times[self.idx] = end_time - start_time
-            print(f">>> [Rx] Prediction: {prediction}, Time taken: {end_time - start_time:.4f} seconds")
+            # print(f">>> [Rx] Prediction: {prediction}, Time taken: {end_time - start_time:.4f} seconds")
             self.idx += 1
 
             self.received_records += 1

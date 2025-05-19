@@ -70,7 +70,7 @@ class LightCardServer:
             
             # Deserialize the data
             data_row = pickle.loads(packet_raw)
-            print(f">>> [Rx] Received data: {data_row}")
+            #print(f">>> [Rx] Received data: {data_row}")
             return np.array(data_row)
         
         except (socket.timeout, ConnectionResetError, EOFError, pickle.UnpicklingError) as e:
@@ -82,8 +82,8 @@ class LightCardServer:
             # Serialize the data
             serialized_data = pickle.dumps(data)
             msg = struct.pack('>I', len(serialized_data)) + serialized_data
-            print(f">>> [Tx] Serialized data size: {len(serialized_data)} bytes")
-            print(f">>> [Tx] Sent data: {data}")
+            #print(f">>> [Tx] Serialized data size: {len(serialized_data)} bytes")
+            #print(f">>> [Tx] Sent data: {data}")
             self.conn.sendall(msg)  
         except (socket.timeout, ConnectionResetError, EOFError) as e:
             print(f">>> [Tx] Error sending data: {e} <<<")
@@ -99,7 +99,7 @@ class LightCardServer:
             
             row = self.rx_process_data()
 
-            print(f" >>> [Rx] Using model: {self.model}")
+            #print(f" >>> [Rx] Using model: {self.model}")
             data_row = row.reshape(1,-1)
 
             start_time = time.time()
@@ -107,8 +107,8 @@ class LightCardServer:
             end_time = time.time()
 
             pred_value = prediction[0] if hasattr(prediction, '__getitem__') else prediction
-            print(f" >>> [Rx] Prediction: {prediction}")
-            print(f" >>> [Rx] Prediction time: {end_time - start_time:.4f} seconds")
+            #print(f" >>> [Rx] Prediction: {prediction}")
+            #print(f" >>> [Rx] Prediction time: {end_time - start_time:.4f} seconds")
 
             self.tx_process_data(pred_value)
 
@@ -170,8 +170,8 @@ class LightCardLocal:
                 end_time = time.time()
 
                 pred_value = prediction[0] if hasattr(prediction, '__getitem__') else prediction
-                print(f" >>> Prediction: {prediction}")
-                print(f" >>> Prediction time: {end_time - start_time:.4f} seconds")
+                #print(f" >>> Prediction: {prediction}")
+                #print(f" >>> Prediction time: {end_time - start_time:.4f} seconds")
 
                 total_predictions += 1
 

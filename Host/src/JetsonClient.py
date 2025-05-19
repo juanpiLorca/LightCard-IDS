@@ -6,7 +6,7 @@ import struct
 
 class JetsonNanoClient: 
 
-    def __init__(self, host, port, storage_file):
+    def __init__(self, host, port, storage_file, num_regs):
         self.host = host
         self.port = port
 
@@ -15,8 +15,10 @@ class JetsonNanoClient:
         self.test_path = None
 
         # Data for each test
-        self.predictions = []
-        self.times = []
+        self.num_regs = num_regs
+        self.idx = 0
+        self.predictions = (-1) * np.ones(shape=(self.num_regs,))
+        self.times = (-1) * np.ones(shape=(self.num_regs,))
         self.sent_records = 0
         self.received_records = 0
 
@@ -36,12 +38,6 @@ class JetsonNanoClient:
         # Load the test files
         self.test_path = test_path
         print(f"Loaded: {self.test_path}")
-
-    def _set_test_attributes(self):
-        self.predictions = []
-        self.times = []
-        self.sent_records = 0
-        self.received_records = 0
 
     def recvall(self, n):
         """Helper function to receive exactly n bytes."""
@@ -114,12 +110,12 @@ class JetsonNanoClient:
             prediction = self.rx_process_data()
             end_time = time.time()
 
-            self.predictions.append(prediction)
-            self.times.append(end_time - start_time)
+            self.predictions[self.idx] = prediction
+            self.times[self.idx] = end_time - start_time
             print(f">>> [Rx] Prediction: {prediction}, Time taken: {end_time - start_time:.4f} seconds")
-            self.received_records += 1
+            self.idx += 1
 
-            time.sleep(3)
+            self.received_records += 1
 
         pred_accuracy, other_accuracy = self.compute_metrics(real_labels, self.predictions, other_predictions)
 

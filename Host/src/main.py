@@ -6,7 +6,7 @@ def main():
     # Initialize the server
     STORAGE_FILE = "/results/times_E{}.{}_C{}.csv"
     STORAGE_FILE = STORAGE_FILE.format(NUM_EXP, NUM_TEST, NUM_CLASS)
-    client = JetsonNanoClient(IP_HOST, PORT, STORAGE_FILE)
+    client = JetsonNanoClient(IP_HOST, PORT, STORAGE_FILE, NUM_REGS)
     # Connect to the server
     client.connect()
 

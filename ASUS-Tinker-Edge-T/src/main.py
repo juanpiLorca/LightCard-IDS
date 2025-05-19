@@ -23,7 +23,7 @@ def main():
 
         # Load model
         model_path = "Tinker_Edge_T_models/model_F1.{}__results.pkl_class{}.pkl"
-        server.load_model(model_path.format(NUM_EXP, NUM_CLASS))
+        server.load_model(model_path.format(NUM_TEST, NUM_CLASS))
 
         # Handle client connections
         server.handle_client()
